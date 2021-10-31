@@ -1,0 +1,329 @@
+.dark {
+    background: #202020;
+    /* width: 100%;
+    height: 100%; */
+    padding: 1vw 8vw;
+}
+
+.grayText {
+    color:#5c5c5c !important;
+    font-family: Roboto-Bold;
+}
+
+.grayThinText {
+    color:#5c5c5c !important;
+    font-family:  Roboto-Light;
+}
+
+.darkText {
+    color:#000 !important;
+    font-family: Roboto-Bold;
+}
+
+.darkThinText {
+    color:#000 !important;
+    font-family:  Roboto-Light;
+}
+
+.lightText {
+    color:#fff;
+    font-family: Roboto-Bold;
+}
+
+.lightThinText {
+    color:#202020 !important;
+    font-family: Roboto-Light;
+}
+
+.titleText {
+  color: #171717;
+  font-family: Roboto-Bold;
+  margin-right: 5px;
+  margin-left: 5px;
+  overflow: hidden;
+  line-height: 1.5em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+ }
+
+ .dateText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #b3b3b3;
+  font-size: 14px;
+  font-family: Roboto-Bold;
+  line-height: 1.5em;
+ }
+ 
+.nameEvent {
+    color:#202020 !important;
+    font-family: LeagueSpartan;;
+}
+ 
+/* ---- */
+.darkTextTitle{
+    color:#202020;
+    font-family: LeagueSpartan;
+    font-size: 200%;
+    font-size: 3vmax;
+}
+
+.darkTextHeading{
+    color:#202020;
+    font-family: LeagueSpartan;
+    font-size: 2.5vmax !important; 
+}
+
+.darkTextSubHeading{
+    color: #202020 !important;
+    font-family: LeagueSpartan;
+    font-size: 2vmax !important;
+}
+
+.darkTextBody{
+    color: #202020 !important; 
+    font-family: LeagueSpartanLight;
+    font-size: 1.5vmax !important;
+    font-weight: 100 !important;
+    text-align: left;
+}
+
+.lightTextTitle{
+    color:#fff;
+    font-family: LeagueSpartan;
+    font-size: 200%;
+    font-size: 3vmax;
+}
+
+.lightTextHeading{
+    color:#fff;
+    font-family: LeagueSpartan;
+    font-size: 2.5vmax !important; 
+}
+
+.lightTextSubHeading{
+    color: #fff !important;
+    font-family: LeagueSpartan;
+    font-size: 2vmax !important;
+}
+
+.lightTextBody{
+    color: #f9f9f9 !important; 
+    font-family: LeagueSpartanLight;
+    font-size: 1.5vmax !important;
+    font-weight: 100 !important;
+    text-align: justify;
+}
+/*-----*/
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+.centerHorizonal {
+    display: table;
+    margin: 0 auto;
+    justify-content: center;
+    text-align: center;
+    /* background: #202020; */
+    /* width: 100%;
+    height: 100%; 
+    padding: 25px 50px;*/
+}
+
+.centerVertical {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+
+.content {
+    width:100%;
+    display: flex;
+    justify-content: center;
+    /* background: #202020 */
+} 
+
+.trendIndex{
+    position: absolute; 
+    bottom: 25%; 
+    left: 5%; 
+}
+
+.trendImg{
+    display: block; 
+}
+
+.trendContainer{
+    position: relative;
+}
+
+.trendIndexFont{
+    color: #f9f9f9 !important; 
+    font-family: LeagueSpartan;
+    font-size: 16px !important;
+    padding-left: 5px;
+}
+
+.trendSubFont{
+    color: #f9f9f9 !important; 
+    font-family: LeagueSpartanLight;
+    font-size: 18px !important;
+    padding-left: 38px;
+}
+
+.dotMargin{
+    margin: 0;
+}
+
+.buttonOval{
+  width: 100%;
+  background-color: #ec1d24; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 28px;
+  font-family: LeagueSpartan;
+  cursor: pointer;
+
+}
+.buttonOval:hover {
+  background-color: #C51117; 
+}
+
+.btnLogin {
+  width: 100%;
+  background-color: #ec1d24; 
+  border: none;
+  color: white;
+  padding: 15px 50px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  font-family: LeagueSpartan;
+  cursor: pointer;
+}
+.btnLogin:hover {
+  background-color: #C51117; 
+}
+
+.writeComment {
+    margin: 0 auto;
+    justify-content: center;
+    text-align: center;
+    /* background: #202020; */
+    /* width: 100%;
+    height: 100%; 
+    padding: 25px 50px;*/
+}
+
+.comment{
+  display: block;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
+  float: left;
+  width: 100%;
+  height: 76px !important;
+  padding: 10px 10px;
+  margin: 0;
+  border: 2px solid rgba(222,222,222,0); 
+  color: #333;
+  background-color: #fff;
+  font-size: 15px;
+  line-height: 18px;
+  -webkit-appearance: none;
+  resize: none;  
+}
+.comment:focus, .comment:hover{
+  border-color: #000;
+}
+
+.btnCbox{
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  width: 93px;
+  height: 76px;
+  background: #ec1d24;
+  border-color: #ec1d24;
+  font-family: LeagueSpartan;
+  font-size: 18px;
+  color: #fff;
+}
+
+.btnCbox:hover{
+  background: #C51117;
+  border-color: #C51117;
+}
+
+.btnCbox:focus{
+  background: #202020;
+  border-color: #202020;
+}
+
+.u_cbox_avatar{
+  position: absolute;
+  top: 15px;
+  left: 5px;
+}
+
+.u_cbox_comment_box {
+  overflow: hidden;
+  position: relative;
+  padding: 14px 15px 10px 62px;
+  border-bottom: 1px solid #e9e9e9;
+  font-size: 17px;
+}
+
+.u_cbox_name{
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 55%;
+  font-family:  Roboto-Bold;
+  font-size: 16px;
+  font-weight: 500;
+  color: #2a2a2a;
+  line-height: 22px;
+}
+
+.u_cbox_contents{
+  display: block;
+  overflow: hidden;
+  font-family:  Roboto-Bold;
+  font-size: 15px;
+  line-height: 20px;
+  color: #5f5f5f;
+  word-break: break-word;
+  word-wrap: break-word;
+}
+
+.u_cbox_date {
+  display: block;
+  font-family: Roboto-Bold;
+  font-size: 13px;
+  color: #999;
+}
+
+.u_cbox_comment_none {
+  padding: 120px 0;
+  font-size: 16px;
+  line-height: 20px;
+  color: #aaa;
+  text-align: center;
+  font-family: Roboto-Light;
+}
