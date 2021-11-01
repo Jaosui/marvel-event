@@ -2,13 +2,13 @@ import React, { ReactElement } from "react";
 import HeadTag from "../../component/Header";
 import { useRouter } from "next/router";
 import Theme from "../../styles/Theme.module.css";
-import { Form, Input, Card, Button, Row, Col, Modal, notification } from "antd";
+import { Form, Input, Card, Button, Row, Col, Modal, notification, Grid } from "antd";
 import { HeartOutlined, CommentOutlined, MessageOutlined, HeartFilled  } from "@ant-design/icons";
 import Image from "next/image";
 import Slider from "react-slick";
 import { charactersDetail, eventDetail1 } from "../../utils/marveiApi";
 import { saveComment } from "../../utils/localstorage";
-import { getData, sendData } from "../../utils/handleFirebase";
+import { deleteFav, getData, sendData, sendFav } from "../../utils/handleFirebase";
 
 interface Props {
   eventDetail: any;
@@ -22,6 +22,12 @@ interface Comment {
   comment: string;
   date: string;
   time: string;
+}
+
+interface Favorite {
+  eventID: number;
+  userId: string;
+  Myfav: boolean
 }
 
 export default function EventID({ eventDetail }: Props): ReactElement {
@@ -42,6 +48,8 @@ export default function EventID({ eventDetail }: Props): ReactElement {
   const [timeComments, setTimeComments] = React.useState("");
   //favHeart
   const [favActive, setFavActive] = React.useState(false);
+  //screen
+  const [screenLg, setScreenLg] = React.useState(false);
 
   const liffId = "1656481834-Gdg42lxP";
 
@@ -112,6 +120,7 @@ export default function EventID({ eventDetail }: Props): ReactElement {
       const id: number = parseInt(queryID as string, 10);
       console.log("getID", id);
       setEventID(id)
+      screenSize()
       // getEventDetail(id)
       eventData01(id);
       //old-comment
@@ -129,15 +138,25 @@ export default function EventID({ eventDetail }: Props): ReactElement {
   const myLoaderFirebase = ({ src }) => {
     return `${src}`;
   };
+
   const favBtn = () => {
     console.log("fav>>");
-    console.log(favActive)
     setFavActive(!favActive)
-    const data = {
-      userID: userId,
-      Myfav: "1",
-    };
-    console.log(data);
+    console.log("2", favActive)
+    const favData:Favorite = {
+      eventID: eventID,
+      userId: 'user1',
+      Myfav: !favActive,
+    }
+    if(favActive === true){
+      console.log('fav false') //delete in firebase
+      deleteFav(favData)
+    } else {
+      console.log('fav true') ///add in firebase
+      sendFav(favData)
+    }
+    
+    console.log(favData);
   };
 
   const settings = {
@@ -290,6 +309,17 @@ export default function EventID({ eventDetail }: Props): ReactElement {
     },
   ];
 
+  //screens
+  const { useBreakpoint } = Grid;  
+
+  const screens = useBreakpoint();
+  const screenSize = () =>{
+    if(screens.lg === true){
+      setScreenLg(true)
+      console.log('lg')
+    }
+  }  
+
   return (
     <>
       <HeadTag />
@@ -298,7 +328,7 @@ export default function EventID({ eventDetail }: Props): ReactElement {
         {event &&
           event.map((item, index) => (
             <div key={index}>
-              <Row wrap={true}>
+              <Row wrap={true}  style={{ background: "#fff" }}>
                 <Col
                   flex="1 0 50%"
                   className="columnFlex"
@@ -320,36 +350,28 @@ export default function EventID({ eventDetail }: Props): ReactElement {
                 <Col
                   flex="1 0 50%"
                   className="columnFlex"
-                  style={{ background: "#fff" }}
+                  style={{ background: "transparent" }}
                 >
-                  <div style={{ padding: "20px " }}>
-                    <div style={{ whiteSpace: "nowrap" }}>
-                      <h3
-                        className={Theme.nameEvent}
-                        style={{ margin: "0 ", display: "inline" }}
-                      >
-                        {item.title}
-                      </h3>
-                      <div
-                        style={{
-                          whiteSpace: "nowrap",
-                          display: "inline",
-                          float: "right",
-                        }}
-                      >
-                        <Button
+                  <div style={{ margin: " 6px auto 0", padding: "15px", background: "#fff", maxWidth: '500px'}}>
+                    <div className={Theme.detailBox}>
+                      <a  style={{display: "block" }}>
+                        <span
+                          className={Theme.detailNameBox}
+                        >
+                          {item.title}
+                        </span>
+                      </a>
+                      <a className={Theme.detailImgBox}>
+                      <Button
                           type="link"
                           onClick={favBtn}
                           icon={ favActive ?
-                            <HeartFilled style={{ fontSize: '40px', color: '#EC1D24'}} /> :
-                            <HeartOutlined style={{ fontSize: "40px", color: "#EC1D24" }} />
-                           
+                            // <HeartOutlined style={{ fontSize: "30px", color: "#000" }} />
+                            <HeartFilled style={{ fontSize: '30px', color: '#EC1D24'}} /> :
+                            <HeartOutlined style={{ fontSize: "30px", color: "#000" }} />
                           }
                         />
-                        {/* <div style={{ width: "2rem" }}>
-                          <Heart isActive={favActive} onClick={() => setFavActive(!favActive)}/>
-                        </div> */}
-                      </div>
+                      </a>
                     </div>
                     <h5
                       className={Theme.grayThinText}
@@ -363,12 +385,12 @@ export default function EventID({ eventDetail }: Props): ReactElement {
                     >
                       end: {item.end.slice(0, 10)}
                     </h5>
-                    <h4
+                    <h5
                       className={Theme.darkThinText}
-                      style={{ textAlign: "justify" }}
+                      style={{ textAlign: "justify", lineHeight: '1.2' }}
                     >
                       {item.description}
-                    </h4>
+                    </h5>
                   </div>
                 </Col>
               </Row>

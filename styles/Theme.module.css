@@ -327,3 +327,32 @@
   text-align: center;
   font-family: Roboto-Light;
 }
+
+.detailBox{
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.detailNameBox{
+  max-width: 240px;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  white-space: pre-wrap;
+  line-height: 28px;
+  font-size: 24px !important;
+  font-family: LeagueSpartan;
+  color: #000;
+}
+
+.detailImgBox {
+  position: relative;
+  display: block;
+  align-self: flex-start;
+  height: 40px;
+  width: 40px;
+}
+

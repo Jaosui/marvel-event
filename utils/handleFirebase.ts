@@ -49,10 +49,16 @@ interface Comment {
   time: string;
 }
 
+interface Favorite {
+  eventID: number;
+  userId: string;
+  Myfav: boolean
+}
+
 export const sendData = (value:Comment) => {
   const saveComment = async (value:Comment) => {
-     console.log(value.eventID)// 270
-   const docRef = doc(db, "commentsData", `${value.eventID}`); //doc(db, "collection", "document target");
+    console.log(value.eventID)// 270
+    const docRef = doc(db, "commentsData", `${value.eventID}`); //doc(db, "collection", "document target");
     const docSnap = await getDoc(docRef);
   
     if (docSnap.exists()) {
@@ -105,3 +111,42 @@ export const getData = async (eventID: number) => {
     }
 }
 
+export const sendFav = async (Favdata: Favorite) => {
+  const saveFav = async (value:Favorite) => {
+    console.log(value.eventID)// 270
+    const docRef = doc(db, "favoriteData", `${value.eventID}`); //doc(db, "collection", "document target");
+    const docSnap = await getDoc(docRef);
+  
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      await updateDoc(docRef, {
+        userFav: arrayUnion(value)
+      });
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+      await setDoc(docRef, {
+      userFav: [value]
+    });
+    }
+  }
+  saveFav(Favdata)
+}
+
+export const deleteFav = async (Favdata: Favorite) => {
+  const removeFav = async (value:Favorite) => {
+    console.log(value.eventID)// 270
+    const docRef = doc(db, "favoriteData", `${value.eventID}`); //doc(db, "collection", "document target");
+    const docSnap = await getDoc(docRef);
+  
+    if (docSnap.exists()) {
+      console.log("deleteFav data:", docSnap.data());
+      const data = docSnap.data().userFav.filter(user => user.userId !== value.userId)
+      console.log('data', data)
+      await updateDoc(docRef, {
+        userFav: data
+      });
+    }
+  }
+  removeFav(Favdata)
+}
