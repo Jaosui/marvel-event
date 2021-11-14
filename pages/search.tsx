@@ -3,6 +3,7 @@ import Theme from '../styles/Theme.module.css'
 import { Row, Col, AutoComplete, Input, Divider, Button } from 'antd'
 import { LeftOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/router'
+import { allEvents } from '../utils/marveiApi'
 
 
 interface Props {
@@ -11,11 +12,8 @@ interface Props {
 
 export default function Search({}: Props): ReactElement {
   const router = useRouter()
-  const options = [
-    { value: 'Burns Bay Road' },
-    { value: 'Downing Street' },
-    { value: 'Wall Street' },
-  ];
+  
+  const [eventObj, setEventObj] = React.useState([])
   // const { Search } = Input;
   const onSearch = (e: any) => {
     if(e.keyCode == 13){
@@ -34,15 +32,28 @@ export default function Search({}: Props): ReactElement {
   //  console.log(e)
   }
 
+  const getData = async () => {
+    const data = await allEvents()
+    console.log(typeof data, data[1])
+    setEventObj(data)
+  }
+  // const options = eventObj
+
+  const options = [
+    { value: 'Burns Bay Road' },
+    { value: 'Downing Street' },
+    { value: 'Wall Street' },
+  ];
+
   const [dataHistory, setDataHistory] = React.useState(null);
   React.useEffect(() => {
+    getData()
     const historyKeyword = JSON.parse(localStorage.getItem("historyKeyword"))|| [];
     console.log(historyKeyword)
     console.log('historyKeyword', historyKeyword)
     setDataHistory(historyKeyword);
     localStorage.setItem('historyKeyword', JSON.stringify(historyKeyword));
   }, []);
-
 
 
   return (
@@ -65,6 +76,14 @@ export default function Search({}: Props): ReactElement {
           <h1 className={Theme.lightTextSubHeading} >What Are You Looking For? </h1>
            {/* <Search size="large" placeholder="input search text" onSearch={onSearch} enterButton /> */}
            <Input style={{ width: '50vw', height: '4vmax' }} allowClear placeholder="Basic usage" onPressEnter={onSearch}/>
+           {/* <AutoComplete
+            style={{ width: 200 }}
+            options={options}
+            placeholder="try to type `b`"
+            // filterOption={(inputValue, option) =>
+            //   option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+            // }
+          /> */}
           <Divider orientation="left" className={Theme.lightTextSubHeading} style={{ margin:'20px 0 10px 0', borderWidth: 2, borderColor: '#fff' }}>History</Divider>
           {/* <h1>{JSON.stringify(dataHistory)}</h1> */}
           {dataHistory && dataHistory.map (item => 

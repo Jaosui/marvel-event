@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import HeadTag from "../../component/Header";
+import HeadTag from "../../components/Header";
 import { useRouter } from "next/router";
 import Theme from "../../styles/Theme.module.css";
 import { Form, Input, Card, Button, Row, Col, Modal, notification, Grid } from "antd";
@@ -8,7 +8,8 @@ import Image from "next/image";
 import Slider from "react-slick";
 import { charactersDetail, eventDetail1 } from "../../utils/marveiApi";
 import { saveComment } from "../../utils/localstorage";
-import { deleteFav, getData, sendData, sendFav } from "../../utils/handleFirebase";
+import { allMyFav, deleteFav, getData, sendData, sendFav } from "../../utils/handleFirebase";
+import { async } from "@firebase/util";
 
 interface Props {
   eventDetail: any;
@@ -53,30 +54,7 @@ export default function EventID({ eventDetail }: Props): ReactElement {
 
   const liffId = "1656481834-Gdg42lxP";
 
-  // const getEventDetail = async (id:number) => {
-  //   console.log('id', id)
-  //   const API_URL = 'https://gateway.marvel.com:443/v1/public/events'
-  //   const TS = '1564731162583'
-  //   const API_KEY ='6e70a1e22940665344ba83e6af995cd9'
-  //   const HASH = 'cfbd637b4bdc3e2a71f0207709daf88b'
-  //   //Server-side applications must pass three parameters in addition to the apikey parameter: ts apikey hash
-  //   const AUTHforMarvel_API =`ts=${TS}&apikey=${API_KEY}&hash=${HASH}`
-
-  //   const eventDetail = `${API_URL}/${id}?${AUTHforMarvel_API}`
-  //   const eventDetail_res = await fetch(eventDetail)
-  //   const eventDetail_data = await eventDetail_res.json() //object
-  //   const event = eventDetail_data.data.results//object
-  //   console.log ('data', event)
-  //   setEvent(event)
-  //   //characters data
-  //   const charactersPath = `${API_URL}/${id}/characters?${AUTHforMarvel_API}`
-  //   const characters_res = await fetch(charactersPath)
-  //   const characters_data = await characters_res.json() //object
-  //   const characters = characters_data.data.results//object
-  //   console.log ('characters data', characters)
-  //   setCharacters(characters)
-  // }
-
+  // init for comment
   const initId = async () => {
     const liff = (await import("@line/liff")).default;
     try {
@@ -86,16 +64,14 @@ export default function EventID({ eventDetail }: Props): ReactElement {
     }
     if (liff.isLoggedIn()) {
       console.log("เข้าสู่ระบบแล้ว");
-      liff
-        .getProfile()
-        .then((profileData) => {
-          console.log(profileData);
-          setUserId(profileData.userId);
-          setDisplayName(profileData.displayName);
-          setImgUser(profileData.pictureUrl);
-          setStatusMessage(profileData.statusMessage);
-        })
-        .catch((err: any) => console.error(err));
+      const user = JSON.parse(localStorage.getItem("User_Profile"));
+      console.log(user)
+      console.log('user.userId', user[0].userId)
+      setUserId(user[0].userId);
+      setDisplayName(user[0].displayName);
+      setImgUser(user[0].pictureUrl);
+      setStatusMessage(user[0].statusMessage);
+      firstTimeFav(user[0].userId)
     } else {
       const profileData = null;
       setImgUser(profileData);
@@ -125,11 +101,29 @@ export default function EventID({ eventDetail }: Props): ReactElement {
       eventData01(id);
       //old-comment
       userComment(id)
-      // console.log('fav firsttime :', favActive)
+      console.log('fav firsttime :', favActive)
+      console.log('userId :', userId)
     }
     currentDate()
     //  console.log('router.query>>', router.query)
   }, [router.query]);
+
+  const firstTimeFav = async (userId:string) => {
+    const queryID = router.query.eventID; //string
+    const id: number = parseInt(queryID as string, 10);
+    console.log(userId)
+    const favEvent = await allMyFav(userId)
+    console.log(favEvent)
+    console.log('eventID', id)
+    for (const i of favEvent.myFav) {
+      console.log(i);
+      // truncate the sequence at 1000
+      if (i === id) {
+        console.log('favไว้แล้วจ้า')
+        setFavActive(true)
+      }
+    }
+  }
 
   const myLoader = ({ src, width, quality }) => {
     return `${src}?w=${width}&q=${quality || 75}`;
@@ -143,9 +137,10 @@ export default function EventID({ eventDetail }: Props): ReactElement {
     console.log("fav>>");
     setFavActive(!favActive)
     console.log("2", favActive)
+    console.log(userId)
     const favData:Favorite = {
       eventID: eventID,
-      userId: 'user1',
+      userId: userId,
       Myfav: !favActive,
     }
     if(favActive === true){
@@ -161,9 +156,8 @@ export default function EventID({ eventDetail }: Props): ReactElement {
 
   const settings = {
     className: "center",
-    infinite: true,
+    infinite: false,
     swipeToSlide: true,
-    centerMode: true,
     slidesToShow: 5,
     responsive: [
       {
@@ -198,7 +192,7 @@ export default function EventID({ eventDetail }: Props): ReactElement {
 
   const userComment = async (eventID:number) => {
     const commentFirestore = await getData(eventID)
-    console.log('Pls>>', commentFirestore)
+    console.log('commentFirestore>>', commentFirestore)
     setComments(commentFirestore)
   }
 
@@ -325,7 +319,9 @@ export default function EventID({ eventDetail }: Props): ReactElement {
       <HeadTag />
       <div className={Theme.dark}>
         {/* descpirtion */}
-        {event &&
+        {characters ? 
+        <div>
+          {event &&
           event.map((item, index) => (
             <div key={index}>
               <Row wrap={true}  style={{ background: "#fff" }}>
@@ -404,7 +400,6 @@ export default function EventID({ eventDetail }: Props): ReactElement {
               characters.map((character: any, index: number) => (
                 <div key={index}>
                   <Card
-                    hoverable
                     bordered={false}
                     style={{ padding: "2px" }}
                     bodyStyle={{ border: 0, padding: "0.5vmax 0 0" }}
@@ -428,7 +423,7 @@ export default function EventID({ eventDetail }: Props): ReactElement {
           style={{ backgroundColor: "#f3f3f3", padding: "10px 20px 15px 20px" }}
         >
           <h2 className={Theme.darkText}>Comments</h2>
-          <div className={Theme.writeComment} style={{ padding: "0 20px" }}>
+          <div className={Theme.writeComment} style={{ padding: "0 10px" }}>
             <Form form={form} onFinish={onFinish} layout="inline">
               <Form.Item
                 name="comment"
@@ -448,7 +443,7 @@ export default function EventID({ eventDetail }: Props): ReactElement {
               </Form.Item>
             </Form>
           </div>
-          <div className={Theme.u_cbox_comment_box}>
+          {/* <div className={Theme.u_cbox_comment_box}>
             <span className={Theme.u_cbox_avatar}>
               <Image
                 loader={myLoaderFirebase}
@@ -464,7 +459,7 @@ export default function EventID({ eventDetail }: Props): ReactElement {
               test1
             </span>
             <span className={Theme.u_cbox_date}>Sep 9, 2021</span>
-          </div>
+          </div> */}
           {comments ?
             comments.map((item, index) => (
               <div key={index} className={Theme.u_cbox_comment_box}>
@@ -511,6 +506,24 @@ export default function EventID({ eventDetail }: Props): ReactElement {
             </Modal>
           </div>
         </div>
+        </div> :
+        <div>
+          <div
+            style={{ margin: " 6px auto 0", background: "transparent" }}
+            className={Theme.centerHorizonal}
+          > 
+          <div className={Theme.u_cbox_comment_none}>
+            <Image
+              loader={myLoader}
+              src="https://thumbs.gfycat.com/LeanEnlightenedAndeancockoftherock.webp"
+              alt="loading"
+              width={60}
+              height={80}
+            />
+          </div>
+          </div>
+        </div>
+        }
       </div>
     </>
   );

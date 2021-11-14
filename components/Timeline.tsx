@@ -14,9 +14,8 @@ export default function Timeline({ data }: Props): ReactElement {
 
   const settings = {
     className: "center",
-    infinite: true,
+    infinite: false,
     swipeToSlide: true,
-    centerMode: true,
     responsive: [
       {
         breakpoint: 1600,
@@ -58,7 +57,7 @@ export default function Timeline({ data }: Props): ReactElement {
   return (
     <>
       <div style={{ backgroundColor: "#f3f3f3", padding: "10px 20px 15px 20px" }}>
-        <h2 className={Theme.darkText}>Events Calendar&emsp;</h2>
+        <h3 className={Theme.darkText}>Events Calendar&emsp;</h3>
         <Slider {...settings}>
           {data &&
             data.map((event: any, index: number) => (

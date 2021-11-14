@@ -1,8 +1,9 @@
 import '../styles/globals.css'
 import 'antd/dist/antd.css';
+import { Divider } from 'antd';
 import { useEffect } from 'react';
 import Head from 'next/head'
-import FooterTag from '../component/Footer'
+import FooterTag from '../components/Footer'
 
 
 

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { Row, Col } from 'antd';
+import { Row, Col, Divider } from 'antd';
 import Theme from "../styles/Theme.module.css"
 import Image from 'next/image'
 import {myLoader} from '../utils/handleImg'
@@ -30,9 +30,12 @@ export default function Footer({}: Props): ReactElement {
   },[])
 
   return (
-    <div>
-      <hr/>
-      <div className={Theme.centerHorizonal} style={{padding: '20px', background: '#202020'}} >
+    <>
+      <div style={{padding: '20px', background: '#202020'}}>
+        <span>
+          <Divider style={{ borderWidth: 2, borderColor: '#fff', margin: '10px' }}></Divider>
+        </span>
+        <div className={Theme.centerHorizonal} style={{padding: '10px'}} >
           <h6 className={Theme.lightText}>
           FOLLOW MARVEL
           </h6>
@@ -48,6 +51,8 @@ export default function Footer({}: Props): ReactElement {
           <h6 className={Theme.lightText}>{copyright} </h6>
           {/* <img style={{display: 'inline'}} alt="logo" src='../logo.png' width="100px"/> */}
         </div>
-    </div>
+      </div>
+      
+    </>
   )
 }

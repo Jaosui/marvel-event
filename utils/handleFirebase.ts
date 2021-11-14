@@ -1,8 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import {  getStorage, ref } from "firebase/storage";
 import { getFirestore, collection, doc, setDoc, updateDoc, getDoc, getDocs, arrayUnion, query, where, Timestamp, addDoc, arrayRemove } from "firebase/firestore";
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -60,6 +60,7 @@ export const sendData = (value:Comment) => {
     console.log(value.eventID)// 270
     const docRef = doc(db, "commentsData", `${value.eventID}`); //doc(db, "collection", "document target");
     const docSnap = await getDoc(docRef);
+    console.log('fs', value)
   
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
@@ -149,4 +150,67 @@ export const deleteFav = async (Favdata: Favorite) => {
     }
   }
   removeFav(Favdata)
+}
+
+export const allMyFav = async (userID: string) => {
+  const citiesRef = collection(db, 'favoriteData');
+    const querySnapshot = await getDocs(citiesRef);
+    const c =[]
+      
+    querySnapshot.forEach((doc) => {
+      // const getData = {
+      //   eventId: doc.id,
+      //   userFav: doc.data().userFav
+      // }
+      // c.push(getData)
+      const userFavObj = doc.data().userFav
+      // console.log(userFavObj)
+      const x =  Object.keys(userFavObj).filter(i => userFavObj[i].userId === userID).reduce( (res, key) => (res[0] = userFavObj[key], res), {} );
+      if (x[0] !== undefined){
+        c.push(x[0].eventID)
+      }
+      // console.log(typeof x, x[0])
+      // const getData = {
+      //   eventId: userFavObj.userId,
+      //   userFav: x
+      // }
+    })
+    // console.log('c', c)
+     const getData = {
+        userId: userID,
+        myFav: c
+      }
+      console.log('1')
+      console.log('getData', getData)
+      return getData
+}
+
+export const getHeroImg = async (eventId:number) => {
+  // var ref = ref(storage, 'banner'+'/'+eventId+".jpg");
+  const url = await getDownloadURL(ref(storage, 'banner'+'/'+eventId+".jpg"));
+  console.log(url)
+  return url
+}
+
+export const rankEvents = async () => {
+  const favRef = collection(db, 'favoriteData');
+  const querySnapshot = await getDocs(favRef);
+  const arrEvents =[]
+    
+  querySnapshot.forEach((doc) => {
+    const userFavObj = doc.data().userFav
+    const getData = {
+      eventId: doc.id,
+      userFav: userFavObj.length
+    }
+    if(userFavObj.length !== 0) {
+      arrEvents.push(getData)
+    }
+  })
+  console.log('arrEvents', arrEvents)
+  const x = arrEvents.sort(function (a, b) {
+    return b.userFav - a.userFav;
+  });
+  console.log('new arrEvents', x)
+  return x
 }

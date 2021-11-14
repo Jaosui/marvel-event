@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import HeadTag from '../component/Header'
+import HeadTag from '../components/Header'
 import Theme from '../styles/Theme.module.css'
 import { List, Card } from 'antd'
 import { useRouter } from 'next/router'
@@ -54,7 +54,7 @@ export default function AllEvent({}: Props): ReactElement {
    
     getData()
     // Update the document title using the browser API
-  });
+  },[]);
   const data = event
   
   const pickEvent = (id: React.Key) => {
@@ -77,8 +77,17 @@ export default function AllEvent({}: Props): ReactElement {
       <HeadTag/>  
       <div className={Theme.dark}>
         <h2 className={Theme.lightTextSubHeading} >Event Sort By Timeline&emsp;</h2>
+        
         <List
-          grid={{ gutter: 16, column: 5 }}
+          grid={{
+            gutter: 16,
+            xs: 1,
+            sm: 3,
+            md: 4,
+            lg: 6,
+            xl: 6,
+            xxl: 3,
+          }}
           dataSource={data}
           rowKey={data => data.id}
           renderItem={event => (

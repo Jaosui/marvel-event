@@ -1,12 +1,15 @@
 import React, { ReactElement } from 'react'
-import HeadTag from '../component/Header'
-import TrendTag from '../component/TrendImg'
-import TimelineTag from '../component/Timeline'
+import HeadTag from '../components/Header'
+import Image from 'next/image'
+import TrendTag from '../components/TrendImg'
+import TimelineTag from '../components/Timeline'
 import Theme from '../styles/Theme.module.css'
 import { Carousel, Card } from 'antd';
 import Slider from "react-slick";
 import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
+import { getHeroImg, rankEvents } from '../utils/handleFirebase'
+import { myLoader } from '../utils/handleImg'
 
 interface Props {
     test: any
@@ -56,15 +59,92 @@ export default function Index({ test, test01, data, attributionText, id, images,
     },
     dotsClass: "slick-dots slick-thumb"
   };
+  React.useEffect(() => {
+    getrankData()
+    console.log(topEvent)
+  }, [])
+  const initEvent = [{
+    eventId: "0",
+    imgUrl: "https://firebasestorage.googleapis.com/v0/b/marvel-event.appspot.com/o/banner%2F263.jpg?alt=media&token=a38370ef-1b82-4faa-9a41-1404cd538e1d",
+    userFav: 0
+  },
+  {
+    eventId: "0",
+    imgUrl: "https://firebasestorage.googleapis.com/v0/b/marvel-event.appspot.com/o/banner%2F263.jpg?alt=media&token=a38370ef-1b82-4faa-9a41-1404cd538e1d",
+    userFav: 0
+  },
+  {
+    eventId: "0",
+    imgUrl: "https://firebasestorage.googleapis.com/v0/b/marvel-event.appspot.com/o/banner%2F263.jpg?alt=media&token=a38370ef-1b82-4faa-9a41-1404cd538e1d",
+    userFav: 0
+  },
+  {
+    eventId: "0",
+    imgUrl: "https://firebasestorage.googleapis.com/v0/b/marvel-event.appspot.com/o/banner%2F263.jpg?alt=media&token=a38370ef-1b82-4faa-9a41-1404cd538e1d",
+    userFav: 0
+  },
+  {
+    eventId: "0",
+    imgUrl: "https://firebasestorage.googleapis.com/v0/b/marvel-event.appspot.com/o/banner%2F263.jpg?alt=media&token=a38370ef-1b82-4faa-9a41-1404cd538e1d",
+    userFav: 0
+  }]
+  const [topEvent, setTopEvent] = React.useState(initEvent);
+  const getrankData = async () => {
+    const rankData = await rankEvents()
+    console.log(rankData)
+    const topFive = rankData.filter((item,index) => index < 5)
+    console.log(topFive)
+    const topRankData = []
+    for (const element of topFive) {
+      const imgPath = await getHeroImg(element.eventId)
+      console.log(imgPath)
+      const eventData = {
+        eventId: element.eventId,
+        imgUrl: imgPath,
+        userFav: element.userFav
+      }
+      console.log(eventData)
+      topRankData.push(eventData)
+    }
+    console.log(topRankData)
+    setTopEvent(topRankData)
+  }
+  const myLoaderFirebase = ({ src }) => {
+    return `${src}`;
+  };
 
 
   return (
       <>
-        <HeadTag/>  
+        <HeadTag/>
+        {topEvent &&
+          <div>
+            {/* <h5>{JSON.stringify(topEvent)}</h5> */}
+            <Slider {...settings} >
+              <div >
+                <TrendTag index={1} imgPath={topEvent[0].imgUrl}/>
+              </div>
+              <div>
+                <TrendTag index={2} imgPath={topEvent[1].imgUrl}/>
+              </div>
+              <div>
+                <TrendTag index={3} imgPath={topEvent[2].imgUrl}/>
+              </div>
+              <div>
+                <TrendTag index={4} imgPath={topEvent[3].imgUrl}/>
+              </div>
+              <div>
+                <TrendTag index={5} imgPath={topEvent[4].imgUrl}/>
+              </div>
+            </Slider>
+          </div>
+        }
+        
+        
         <div className={Theme.dark}>
           {/* <h1 className={Theme.lightTextSubHeading} >Top 5</h1> */}
-          <Slider {...settings}>
-            <div>
+          {/* <Slider {...settings} >
+            <div >
               <TrendTag index={1} />
             </div>
             <div>
@@ -79,7 +159,7 @@ export default function Index({ test, test01, data, attributionText, id, images,
             <div>
               <TrendTag index={5}/>
             </div>
-          </Slider>
+          </Slider> */}
           {/* <h1 className={Theme.lightTextBody}>{startDate_event.id}</h1> */}
           {/* <h1 className={Theme.lightTextBody}>{ JSON.stringify(startDate_event.id)}</h1> */}
           <div style= {{padding: '3vmax 0'}}>

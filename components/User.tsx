@@ -31,12 +31,12 @@ export default function User({}: Props): ReactElement {
         console.log('เข้าสู่ระบบแล้ว')
         liff.getProfile().then((profileData) => {
           // console.log(profileData);
-          const userData = {
+          const userData = [{
             key: '0',
             userId: profileData.userId,
             displayName: profileData.displayName,
             pictureUrl: profileData.pictureUrl
-          }
+          }]
           console.log('userData', userData)
           saveProfileData(userData)
           setImgUser(profileData.pictureUrl)
@@ -57,7 +57,7 @@ export default function User({}: Props): ReactElement {
     console.log("login")
     const liff = (await import('@line/liff')).default
     await liff.ready
-    liff.login();
+    liff.login({ redirectUri: window.location.href });
   }
 
   const logout = async () => {
