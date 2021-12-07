@@ -73,67 +73,55 @@ export default function Rank({}: Props): ReactElement {
       <HeadTag/> 
       <div className={Theme.dark}>
       <h2 className={Theme.lightText}>Today&apos;s ranking</h2>
-        {/* <div className={Theme.favBody}>
-          <span className={Theme.flagNumber}>
-            1
-          </span>
-          <span className={Theme.favImg}>
-              <Image
-              loader={myLoader}
-              src={`http://i.annihil.us/u/prod/marvel/i/mg/1/b0/51cb2d3ee5cbb/standard_fantastic.jpg`}
-              alt= {`Other - Evolve or Die`}
-              width={80}
-              height={80}
-              />
-            </span >
-            
-            <div className={Theme.favTitle} >
-              Other - Evolve or Die
-              <p>
-              <HeartOutlined style={{ fontSize: '12px', color: '#f5f5f5'}} />
-              <span className={Theme.favNum}>12</span>
-              </p>
-              
-            </div>
-        </div> */}
-        <List
-          grid={{
-          gutter: 16,
-          xs: 1,
-          sm: 1,
-          md: 2,
-          lg: 2,
-          xl: 2,
-          xxl: 2,
-        }}
-        dataSource={data}
-        rowKey={data => data.id}
-        renderItem={(event, index) => (
-          <List.Item>
-            <div className={Theme.favBody}>
-              <span className={Theme.flagNumber}>
-                {index+1}
-              </span>
-              <span className={Theme.favImg}>
-                <Image
-                  loader={myLoader}
-                  src={`${event.thumbnail.path}/standard_fantastic.${event.thumbnail.extension}`}
-                  alt= {`${event.eventTitle}`}
-                  width={80}
-                  height={80}
-                />
-              </span >
-              <div className={Theme.favTitle} >
-                {event.eventTitle}
-                <p>
-                  <HeartFilled style={{ fontSize: '12px', color: '#ec1d24'}} />
-                  <span className={Theme.favNum}>{event.userFav}</span>
-                </p>
-              </div>
-            </div>
-          </List.Item>
-        )}
-      />
+       <List
+       grid={{
+       gutter: 16,
+       xs: 1,
+       sm: 1,
+       md: 2,
+       lg: 2,
+       xl: 2,
+       xxl: 2,
+     }}
+     locale={{ emptyText: <div className={Theme.u_cbox_comment_none}>
+     <div>
+       {/* <MessageOutlined style={{ fontSize: '60px', paddingBottom: '10px' }}/> */}
+       <img
+         src='empty.png'
+         alt= "No data"
+         width="80px"
+       />
+     </div>
+     <span className={Theme.u_cbox_comment_none}>No data available</span>
+   </div>}}
+     dataSource={data}
+     rowKey={data => data.id}
+     renderItem={(event, index) => (
+       <List.Item>
+         <div className={Theme.favBody}>
+           <span className={Theme.flagNumber}>
+             {index+1}
+           </span>
+           <span className={Theme.favImg}>
+             <Image
+               loader={myLoader}
+               src={`${event.thumbnail.path}/standard_fantastic.${event.thumbnail.extension}`}
+               alt= {`${event.eventTitle}`}
+               width={80}
+               height={80}
+             />
+           </span >
+           <div className={Theme.favTitle} >
+             {event.eventTitle}
+             <p>
+               <HeartFilled style={{ fontSize: '12px', color: '#ec1d24'}} />
+               <span className={Theme.favNum}>{event.userFav}</span>
+             </p>
+           </div>
+         </div>
+       </List.Item>
+     )}
+   />
       </div>
     </div>
   )

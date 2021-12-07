@@ -3,6 +3,7 @@ import { Layout, Button,  Row, Col} from 'antd';
 import { HeartOutlined, HeartFilled, SearchOutlined, TrophyOutlined, TrophyFilled } from '@ant-design/icons';
 import { useRouter } from 'next/router'
 import User from './User'
+import Link from 'next/link'
 
 interface Props {
     
@@ -48,52 +49,64 @@ export default function Header({}: Props): ReactElement {
     <>
       <Layout >
         <Header style={{ background: "#202020", padding: "0 4px", height: 64}}>
-          <Row gutter={[8, { xs: 8, sm: 16, md: 24, lg: 32 }]} style={{ height: 64}} justify="space-around"  >
-          <Col xs={2} lg={1} className="center" style={{ height: 64}}>
+          <Row gutter={[8, { xs: 8, sm: 16, md: 24, lg: 32 }]} style={{ height: 50}} justify="space-around" >
+          <Col xs={2} lg={1} className="center" style={{ height: 50}}>
               <span >
-              { pageRank ?<Button
+              { pageRank ?
+              // <Link href="/rank">
+                <Button
                   type="link"
-                  onClick={() => router.push('/rank')} 
+                  onClick={() => router.push('/rank') } 
                   icon={
                   // <HeartOutlined  style={{ fontSize: '20px', color: '#fff'}} />}
                   <TrophyFilled  style={{ fontSize: '4vw', color: '#fff'}} />
                   }
-                  /> : <Button
+                  /> 
+                  
+              // </Link>
+                  : 
+              // <Link href="/rank">
+                <Button
                   type="link"
-                  onClick={() => router.push('/rank')} 
+                  onClick={() => router.push('/rank')}
                   icon={
                   // <HeartOutlined  style={{ fontSize: '20px', color: '#fff'}} />}
                   <TrophyOutlined style={{ fontSize: '4vw', color: '#fff'}} />
                   }
-                  /> 
+                  />
+                // </Link>
                 }
               </span>
             </Col>
-            <Col xs={2} lg={1} className="center" style={{ height: 64}}>
+            <Col xs={2} lg={1} className="center" style={{ height: 50}}>
               <span >
-                { pageMyfav ? <Button
+                { pageMyfav ? 
+                  <Button
+                    type="link"
+                    onClick={() => router.push('/myFav')} 
+                    icon={
+                    // <HeartOutlined  style={{ fontSize: '20px', color: '#fff'}} />}
+                    <HeartFilled style={{ fontSize: '4vw', color: '#fff'}} />
+                    }
+                    />
+                : 
+                  <Button
                   type="link"
-                  onClick={() => router.push('/myFav')} 
-                  icon={
-                  // <HeartOutlined  style={{ fontSize: '20px', color: '#fff'}} />}
-                  <HeartFilled style={{ fontSize: '4vw', color: '#fff'}} />
-                  }
-                  /> : <Button
-                  type="link"
-                  onClick={() => router.push('/myFav')} 
+                  onClick={() => router.push('/myFav')}
                   icon={
                   // <HeartOutlined  style={{ fontSize: '20px', color: '#fff'}} />}
                   <HeartOutlined  style={{ fontSize: '4vw', color: '#fff'}} />
                   }
-                  /> 
+                  />
                 }
               </span>
             </Col>
             <Col xs={3} lg={{offset: 1, span: 1}} className="center"> </Col>
-            <Col xs={8} lg={8}>
-              <div>
-                <h2 className="logo" onClick={() => router.push('/')}>MARVEL</h2>
-              </div>
+            <Col xs={8} lg={8} className="center">
+              {/* <div>
+                <h2 className="logo" >MARVEL</h2>
+              </div> */}
+              <span style={{fontSize: '28px'}} className="logo" >MARVEL</span>
             </Col>
             <Col xs={3} lg={{offset: 1, span: 1}} className="center"> </Col>
             <Col xs={2} lg={{offset: 1, span: 1}} className="center">
@@ -103,15 +116,15 @@ export default function Header({}: Props): ReactElement {
                   onClick={() => router.push('/search')} 
                   icon={
                   // <HeartOutlined  style={{ fontSize: '20px', color: '#fff'}} />}
-                  <SearchOutlined style={{ fontSize: '4vw', color: '#fff'}} />
+                  <SearchOutlined style={{ fontSize: '3.5vw', color: '#fff'}} />
                   }
                   />
               </span>
             </Col>
             <Col xs={3} lg={1} className="center">
-              <span >
+              <div>
                 <User/>
-              </span>
+              </div>
             </Col>
           </Row>
         </Header>

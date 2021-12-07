@@ -1,3 +1,5 @@
+import Title from "antd/lib/skeleton/Title"
+
 const API_URL = 'https://gateway.marvel.com:443/v1/public/events'
 const TS = '1564731162583'
 const API_KEY ='6e70a1e22940665344ba83e6af995cd9'
@@ -42,4 +44,29 @@ export const allEvents = async () => {
   eventsData
   console.log(event)
   return event
+}
+
+export const searchKeyword = async (value:string) => {
+  console.log(value)
+  const searchKeyPath = `${API_URL}?nameStartsWith=${value}&limit=50&${AUTHforMarvel_API}`
+  const searchKey_res = await fetch(searchKeyPath)
+  const searchKey_data = await searchKey_res.json() //object
+  const searchKey = searchKey_data.data.results//object
+  console.log('searchKey',searchKey)
+  const searchKeys = []
+  const searchData = searchKey.map( item => {
+    const data = {
+      eventid: item.id,
+      title: item.title,
+      thumbnail: item.thumbnail
+    }
+    searchKeys.push(data)
+  })
+  searchData
+  const searchKeyData = {
+    total: searchKey_data.data.total,
+    data: searchKeys
+  }
+  console.log(searchKeyData)
+  return searchKeyData
 }

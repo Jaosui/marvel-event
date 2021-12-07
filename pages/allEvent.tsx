@@ -88,6 +88,17 @@ export default function AllEvent({}: Props): ReactElement {
             xl: 6,
             xxl: 3,
           }}
+          locale={{
+            emptyText: (
+              <div className={Theme.u_cbox_comment_none}>
+                <div>
+                  {/* <MessageOutlined style={{ fontSize: '60px', paddingBottom: '10px' }}/> */}
+                  <img src="empty.png" alt="No data" width="80px" />
+                </div>
+                <span className={Theme.u_cbox_comment_none}>wait a minute...</span>
+              </div>
+            ),
+          }}
           dataSource={data}
           rowKey={data => data.id}
           renderItem={event => (
@@ -109,8 +120,15 @@ export default function AllEvent({}: Props): ReactElement {
               }
                 onClick={() => pickEvent(event.id)}
               >
-                <h4 style={{ margin: '0 1px', textAlign: 'center' }} className={Theme.lightText}>{event.title}</h4>
-                <h5 style={{ textAlign: 'center' }} className={Theme.lightText}>{event.start.slice(0,10)}</h5>
+                {/* <h4 style={{ margin: '0 1px', textAlign: 'center' }} className={Theme.lightText}>{event.title}</h4> */}
+                {/* <h5 style={{ textAlign: 'center' }} className={Theme.lightText}>{event.start.slice(0,10)}</h5>
+                 */}
+                 <div style={{ margin: '0 1px', textAlign: 'center', fontSize:'16px'  }} className={Theme.titleLightText}>
+                    {event.title}
+                  </div>
+                  <div style={{ margin: '0 0 10px', textAlign: 'center', fontSize:'12px' }} className={Theme.darkText}>
+                    {event.start.slice(0, 10)}
+                  </div>
                 {/* <Meta title= {<h3 style={{ margin: '0' }} className={Theme.lightText}>{event.title}</h3>} description={<h4 style={{ textAlign: 'center' }} className={Theme.lightText}>{event.start.slice(0,10)}</h4>} /> */}
               </Card>
             </List.Item>

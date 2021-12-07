@@ -1,15 +1,14 @@
 import React, { ReactElement } from "react";
 import HeadTag from "../../components/Header";
 import { useRouter } from "next/router";
-import Theme from "../../styles/Theme.module.css";
 import { Form, Input, Card, Button, Row, Col, Modal, notification, Grid } from "antd";
 import { HeartOutlined, CommentOutlined, MessageOutlined, HeartFilled  } from "@ant-design/icons";
 import Image from "next/image";
 import Slider from "react-slick";
 import { charactersDetail, eventDetail1 } from "../../utils/marveiApi";
-import { saveComment } from "../../utils/localstorage";
 import { allMyFav, deleteFav, getData, sendData, sendFav } from "../../utils/handleFirebase";
 import { async } from "@firebase/util";
+import Theme from "../../styles/Theme.module.css"
 
 interface Props {
   eventDetail: any;
@@ -28,13 +27,15 @@ interface Comment {
 interface Favorite {
   eventID: number;
   userId: string;
-  Myfav: boolean
+  Myfav: boolean;
+  eventName: string;
 }
 
 export default function EventID({ eventDetail }: Props): ReactElement {
   const router = useRouter();
   const [event, setEvent] = React.useState(null);
   const [eventID, setEventID] = React.useState(null);
+  const [eventName, setEventName] = React.useState(null);
   //profileUser
   const [userId, setUserId] = React.useState("");
   const [displayName, setDisplayName] = React.useState("");
@@ -85,6 +86,9 @@ export default function EventID({ eventDetail }: Props): ReactElement {
     console.log("event", event);
     console.log("charactersData", charactersData);
     setEvent(event);
+    setEventName(event[0].title)
+    // console.log(eventName)
+    console.log(event[0].title)
     setCharacters(charactersData);
   };
 
@@ -135,13 +139,15 @@ export default function EventID({ eventDetail }: Props): ReactElement {
 
   const favBtn = () => {
     console.log("fav>>");
+    console.log(eventName)
     setFavActive(!favActive)
     console.log("2", favActive)
-    console.log(userId)
+    // console.log(userId)
     const favData:Favorite = {
       eventID: eventID,
       userId: userId,
       Myfav: !favActive,
+      eventName: eventName
     }
     if(favActive === true){
       console.log('fav false') //delete in firebase
@@ -150,7 +156,6 @@ export default function EventID({ eventDetail }: Props): ReactElement {
       console.log('fav true') ///add in firebase
       sendFav(favData)
     }
-    
     console.log(favData);
   };
 

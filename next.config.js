@@ -3,4 +3,7 @@ module.exports = {
   images: {
     loader: 'custom'
  },
+ resolve: {
+  extensions: ['.js', '.jsx', '.ts', '.tsx'],
+},
 }

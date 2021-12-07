@@ -28,6 +28,7 @@ export default function Footer({}: Props): ReactElement {
     }
     copyrightText()
   },[])
+  const styleSocialLogo = {display: 'inline', padding: '5px'}
 
   return (
     <>
@@ -40,13 +41,27 @@ export default function Footer({}: Props): ReactElement {
           FOLLOW MARVEL
           </h6>
           <h4 className={Theme.lightText}>
-          <img style={{display: 'inline', padding: '5px'}} alt="fb" src='../SocialMedia/facebook.png' width="40px"/>
-          <img style={{display: 'inline', padding: '5px'}} alt="instagram" src='../SocialMedia/instagram.png' width="40px"/>
-          <img style={{display: 'inline', padding: '5px'}} alt="pinterest" src='../SocialMedia/pinterest-social-logo.png' width="40px"/>
-          <img style={{display: 'inline', padding: '5px'}} alt="snapchat" src='../SocialMedia/snapchat.png' width="40px"/>
-          <img style={{display: 'inline', padding: '5px'}} alt="twitter" src='../SocialMedia/twitter.png' width="40px"/>
-          <img style={{display: 'inline', padding: '5px'}} alt="tumblr" src='../SocialMedia/tumblr.png' width="40px"/>
-          <img style={{display: 'inline', padding: '5px'}} alt="youtube" src='../SocialMedia/youtube.png' width="40px"/>
+          <a target="_blank" rel="noreferrer" href="http://facebook.com/marvel" aria-label="follow us on Facebook, opens a new window" >
+            <img style={styleSocialLogo} alt="fb" src='../SocialMedia/facebook.png' width="40px"/>
+          </a>
+          <a target="_blank" rel="noreferrer" href="http://twitter.com/marvel" aria-label="follow us on Twitter, opens a new window">
+            <img style={styleSocialLogo} alt="twitter" src='../SocialMedia/twitter.png' width="40px"/>
+          </a>
+          <a target="_blank" rel="noreferrer" href="https://www.instagram.com/marvel/" aria-label="follow us on Instagram, opens a new window">
+            <img style={styleSocialLogo} alt="instagram" src='../SocialMedia/instagram.png' width="40px"/>
+          </a>
+          <a target="_blank" rel="noreferrer" href="https://www.pinterest.com/marvel/_created/" aria-label="follow us on Pinterest, opens a new window">
+          <img style={styleSocialLogo} alt="pinterest" src='../SocialMedia/pinterest-social-logo.png' width="40px"/>
+          </a>
+          <a target="_blank" rel="noreferrer" href="https://www.snapchat.com/add/marvelhq" aria-label="follow us on Snapchat, opens a new window">
+            <img style={styleSocialLogo} alt="snapchat" src='../SocialMedia/snapchat.png' width="40px"/>
+          </a>
+          <a target="_blank" rel="noreferrer" href="http://marvelentertainment.tumblr.com" aria-label="follow us on Tumblr, opens a new window" >
+            <img style={styleSocialLogo} alt="tumblr" src='../SocialMedia/tumblr.png' width="40px"/>
+          </a>
+          <a target="_blank" rel="noreferrer" href="http://youtube.com/marvel" aria-label="follow us on Youtube, opens a new window" >
+            <img style={styleSocialLogo} alt="youtube" src='../SocialMedia/youtube.png' width="40px"/>
+          </a>
           </h4>
           <h6 className={Theme.lightText}>{copyright} </h6>
           {/* <img style={{display: 'inline'}} alt="logo" src='../logo.png' width="100px"/> */}

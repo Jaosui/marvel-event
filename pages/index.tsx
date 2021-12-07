@@ -35,6 +35,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
 
   const test01 = ["ant", "bee", "cat", "dog"]
+  
   return {
       props: { 
         startDate_event: startDate_event
@@ -59,6 +60,7 @@ export default function Index({ test, test01, data, attributionText, id, images,
     },
     dotsClass: "slick-dots slick-thumb"
   };
+  
   React.useEffect(() => {
     getrankData()
     console.log(topEvent)
@@ -88,25 +90,26 @@ export default function Index({ test, test01, data, attributionText, id, images,
     imgUrl: "https://firebasestorage.googleapis.com/v0/b/marvel-event.appspot.com/o/banner%2F263.jpg?alt=media&token=a38370ef-1b82-4faa-9a41-1404cd538e1d",
     userFav: 0
   }]
+
   const [topEvent, setTopEvent] = React.useState(initEvent);
   const getrankData = async () => {
     const rankData = await rankEvents()
-    console.log(rankData)
+    //console.log(rankData)
     const topFive = rankData.filter((item,index) => index < 5)
-    console.log(topFive)
+    //console.log(topFive)
     const topRankData = []
     for (const element of topFive) {
       const imgPath = await getHeroImg(element.eventId)
-      console.log(imgPath)
+      //console.log(imgPath)
       const eventData = {
         eventId: element.eventId,
         imgUrl: imgPath,
         userFav: element.userFav
       }
-      console.log(eventData)
+      //console.log(eventData)
       topRankData.push(eventData)
     }
-    console.log(topRankData)
+    //console.log(topRankData)
     setTopEvent(topRankData)
   }
   const myLoaderFirebase = ({ src }) => {

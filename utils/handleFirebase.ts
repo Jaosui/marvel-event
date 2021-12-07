@@ -52,7 +52,8 @@ interface Comment {
 interface Favorite {
   eventID: number;
   userId: string;
-  Myfav: boolean
+  Myfav: boolean;
+  eventName: string;
 }
 
 export const sendData = (value:Comment) => {
@@ -199,11 +200,14 @@ export const rankEvents = async () => {
     
   querySnapshot.forEach((doc) => {
     const userFavObj = doc.data().userFav
-    const getData = {
-      eventId: doc.id,
-      userFav: userFavObj.length
-    }
+    
+    
     if(userFavObj.length !== 0) {
+      const getData = {
+        eventId: doc.id,
+        eventName: userFavObj[0].eventName,
+        userFav: userFavObj.length
+      }
       arrEvents.push(getData)
     }
   })

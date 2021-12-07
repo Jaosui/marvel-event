@@ -10,6 +10,7 @@ import FooterTag from '../components/Footer'
 function MyApp({ Component, pageProps }) {
   // const {  Content, Footer } = Layout;
   
+
   return (
     <div className='overlay'>
       <Head>

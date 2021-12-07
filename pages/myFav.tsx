@@ -110,59 +110,58 @@ export default function MyFav({}: Props): ReactElement {
               </h5>
             </Modal>
           </div>
-        {/* <Divider orientation="left" style={{ borderWidth: 2, borderColor: '#fff', margin: '10px' }}> */}
-        <h2 className={Theme.lightText}>My Favorite</h2> 
-        {/* </Divider> */}
-        {/* <Button  onClick={test4} type="primary">Primary Button</Button> */}
-       
-        {/* {myFav&&myFav.map(item  => 
-          <>
-            <h5 className={Theme.lightText}>{item}</h5>
-          </>
-        )} */}
-        {/* แบบใหม่แบบสับ */}
+        <h2 className={Theme.lightText}>My Favorite</h2>
         <List
-           grid={{
-            gutter: 16,
-            xs: 1,
-            sm: 1,
-            md: 2,
-            lg: 2,
-            xl: 2,
-            xxl: 2,
-          }}
-          dataSource={data}
-          rowKey={data => data.id}
-          renderItem={event => (
-            <List.Item>
-              
-                <div className={Theme.favBody}>
-                  <span className={Theme.favImg}>
-                    <Image
-                    loader={myLoader}
-                    src={`${event.thumbnail.path}/standard_fantastic.${event.thumbnail.extension}`}
-                    alt= {`${event.title}`}
-                    width={80}
-                    height={80}
-                    />
-                  </span>
-                  <div className={Theme.favTitle} >
-                    {event.title}
-                    <button
-                      onClick={() => pickEvent(event.id)}
-                      className={Theme.btnReadmore}
-                    >
-                      Read more
-                    </button>
-                  </div>
-                  <span className={Theme.favIcon}>
-                    <HeartFilled   style={{ fontSize: '25px', color: '#ec1d24'}} />
-                  </span>
-                </div>
-            </List.Item>
-          )}
-        />
-        
+        grid={{
+         gutter: 16,
+         xs: 1,
+         sm: 1,
+         md: 2,
+         lg: 2,
+         xl: 2,
+         xxl: 2,
+       }}
+       locale={{ emptyText: <div className={Theme.u_cbox_comment_none}>
+     <div>
+       {/* <MessageOutlined style={{ fontSize: '60px', paddingBottom: '10px' }}/> */}
+       <img
+         src='empty.png'
+         alt= "No data"
+         width="80px"
+       />
+     </div>
+     <span className={Theme.u_cbox_comment_none}>Keep your favorite moments. </span>
+   </div>}}
+       dataSource={data}
+       rowKey={data => data.id}
+       renderItem={event => (
+         <List.Item>
+             <div className={Theme.favBody}>
+               <span className={Theme.favImg}>
+                 <Image
+                 loader={myLoader}
+                 src={`${event.thumbnail.path}/standard_fantastic.${event.thumbnail.extension}`}
+                 alt= {`${event.title}`}
+                 width={80}
+                 height={80}
+                 />
+               </span>
+               <div className={Theme.favTitle} >
+                 {event.title}
+                 <button
+                   onClick={() => pickEvent(event.id)}
+                   className={Theme.btnReadmore}
+                 >
+                   Read more
+                 </button>
+               </div>
+               <span className={Theme.favIcon}>
+                 <HeartFilled   style={{ fontSize: '25px', color: '#ec1d24'}} />
+               </span>
+             </div>
+         </List.Item>
+       )}
+     />
       </div>
     </>
   )

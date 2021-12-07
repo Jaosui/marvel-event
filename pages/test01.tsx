@@ -7,7 +7,7 @@ import { myLoader } from "../utils/handleImg";
 
 interface Props {}
 
-export default function test01({}: Props): ReactElement {
+export default function Test01({}: Props): ReactElement {
   const router = useRouter();
 
   const event = {
