@@ -1,24 +1,19 @@
 import React, { ReactElement } from 'react'
 import HeadTag from '../components/Header'
 import Theme from '../styles/Theme.module.css'
-import { List, Card, Divider, Button, Skeleton, Modal, notification, } from 'antd'
+import { List, Modal } from 'antd'
 import Image from 'next/image'
 import { myLoader } from '../utils/handleImg'
 import { allMyFav } from '../utils/handleFirebase'
 import { useRouter } from 'next/router'
 import { eventDetail1 } from '../utils/marveiApi'
-import { HeartOutlined, HeartFilled  } from '@ant-design/icons';
-import { saveProfileData } from '../utils/localstorage'
+import { HeartFilled  } from '@ant-design/icons';
 
 interface Props {
     
 }
 
 export default function MyFav({}: Props): ReactElement {
-  const test4 = () => {
-    const userID = 'user5'
-    allMyFav(userID)
-  }
 
   const [myFav, setMyFav] = React.useState([]);
   const [isModalLogin, setIsModalLogin] = React.useState(false);
@@ -27,15 +22,15 @@ export default function MyFav({}: Props): ReactElement {
 
   const userDataFav = async (userID:string) => {
     const favFirestore = await allMyFav(userID)
-    console.log('Pls>>', favFirestore)
+    // console.log('Pls>>', favFirestore)
     const events = favFirestore.myFav
     const myFavData = []
     for (const element of events) {
-      console.log(element);
+      // console.log(element);
       const eventDetail = await eventDetail1(element)
       myFavData.push(eventDetail[0])
     }
-    console.log(myFavData)
+    // console.log(myFavData)
     // setMyFav(favFirestore.myFav)
     setMyFav(myFavData)
   }
@@ -46,8 +41,8 @@ export default function MyFav({}: Props): ReactElement {
       const user = JSON.parse(localStorage.getItem("User_Profile")) || [];
       if(user.length !== 0){
         console.log('เข้าสู่ระบบแล้ว', user)
-        console.log('length', user.length)
-        console.log('userId', user[0].userId)
+        // console.log('length', user.length)
+        // console.log('userId', user[0].userId)
         setIsModalLogin(false)
         userDataFav(user[0].userId)
       } else{
@@ -61,9 +56,9 @@ export default function MyFav({}: Props): ReactElement {
 
 
     const pickEvent = (id: React.Key) => {
-      console.log('pickEvent: ', id)
+      // console.log('pickEvent: ', id)
       const eventID = parseInt(id as string, 10)
-      console.log(eventID)
+      // console.log(eventID)
       router.push({
         pathname: '/eventDetail/[eventID]',
         query: { eventID: eventID },
@@ -123,7 +118,6 @@ export default function MyFav({}: Props): ReactElement {
        }}
        locale={{ emptyText: <div className={Theme.u_cbox_comment_none}>
      <div>
-       {/* <MessageOutlined style={{ fontSize: '60px', paddingBottom: '10px' }}/> */}
        <img
          src='empty.png'
          alt= "No data"

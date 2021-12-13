@@ -30,14 +30,7 @@ function MyApp({ Component, pageProps }) {
           type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
         />
-        {/* <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script> */}
       </Head>
-      {/* <Layout >
-        <Content style={{ background: "white", padding: '0 50px' }}>
-          <Component {...pageProps} />
-        </Content>
-        <Footer style={{ background: "#202020", textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-      </Layout> */}
       <Component {...pageProps} />
       <FooterTag/>
     </div>

@@ -5,10 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8080",
     "lint": "next lint",
-    "predeploy": "npm run build && next export",
-    "deploy": "firebase deploy"
+    "deploy": "npm run build && gcloud app deploy"
   },
   "dependencies": {
     "@line/liff": "^2.16.0",

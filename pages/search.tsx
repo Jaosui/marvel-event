@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import Theme from "../styles/Theme.module.css";
 import { Row, Col, AutoComplete, Input, Divider, Button } from "antd";
-import { LeftOutlined, SearchOutlined } from "@ant-design/icons";
+import { LeftOutlined, SearchOutlined, HomeOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { allEvents, searchKeyword } from "../utils/marveiApi";
 import { rankEvents } from "../utils/handleFirebase";
@@ -10,6 +10,12 @@ import Image from "next/image";
 import { myLoader } from "../utils/handleImg";
 
 interface Props {}
+
+interface Event {
+  eventid: number;
+  title: string;
+  thumbnail: any;
+}
 
 export default function Search({}: Props): ReactElement {
   const router = useRouter();
@@ -56,7 +62,6 @@ export default function Search({}: Props): ReactElement {
       getRankData();
       console.log("time");
     }, 5000);
-
     const historyKeyword =
       JSON.parse(localStorage.getItem("historyKeyword")) || [];
     console.log(historyKeyword);
@@ -125,28 +130,21 @@ export default function Search({}: Props): ReactElement {
               type="link"
               onClick={() => router.push("/")}
               icon={
-                // <HeartOutlined  style={{ fontSize: '20px', color: '#fff'}} />}
-                <LeftOutlined style={{ fontSize: "4vw", color: "#fff" }} />
+                <HomeOutlined style={{ fontSize: "4vw", color: "#fff" }} />
               }
             />
           </span>
         </Col>
       </Row>
       <div className={Theme.centerHorizonal} style={{ background: "#202020" }}>
-        <h1 className={Theme.lightTextSubHeading}>
-          What Are You Looking For?{" "}
-        </h1>
-        {/* <Search size="large" placeholder="input search text" onSearch={onSearch} enterButton /> */}
+        <h1 className={Theme.lightTextSubHeading}>What Are You Looking For?</h1>
         <Input
           suffix={<SearchOutlined />}
-          style={{ width: "50vw", height: "4vmax" }}
+          style={{ width: "50vw" }}
           allowClear
-          // placeholder="Basic usage"
           placeholder={`${placeholder}`}
           onPressEnter={onSearch}
         />
-
-        {/* <h6>JS {JSON.stringify(eventObj) }</h6> */}
 
         {eventObj ? (
           <>
@@ -178,7 +176,6 @@ export default function Search({}: Props): ReactElement {
                 emptyText: (
                   <div className={Theme.u_cbox_comment_none}>
                     <div>
-                      {/* <MessageOutlined style={{ fontSize: '60px', paddingBottom: '10px' }}/> */}
                       <img src="empty.png" alt="No data" width="80px" />
                     </div>
                     <span className={Theme.u_cbox_comment_none}>No data</span>
@@ -187,7 +184,7 @@ export default function Search({}: Props): ReactElement {
               }}
               dataSource={eventObj}
               rowKey={eventObj.map((item) => item.eventid)}
-              renderItem={(event) => (
+              renderItem={(event: Event) => (
                 <List.Item>
                   <Card
                     hoverable
@@ -202,14 +199,19 @@ export default function Search({}: Props): ReactElement {
                         width={250}
                         height={250}
                       />
-                      // <img alt= {`${event.title}`} src={`${event.thumbnail.path}/standard_fantastic.${event.thumbnail.extension}`} />
                     }
                     onClick={() => pickEvent(event.eventid)}
                   >
-                    <div style={{ margin: '0 1px', textAlign: 'center', fontSize:'16px'  }} className={Theme.titleLightText}>
+                    <div
+                      style={{
+                        margin: "0 1px",
+                        textAlign: "center",
+                        fontSize: "16px",
+                      }}
+                      className={Theme.titleLightText}
+                    >
                       {event.title}
                     </div>
-                    {/* <Meta title= {<h3 style={{ margin: '0' }} className={Theme.lightText}>{event.title}</h3>} description={<h4 style={{ textAlign: 'center' }} className={Theme.lightText}>{event.start.slice(0,10)}</h4>} /> */}
                   </Card>
                 </List.Item>
               )}
@@ -229,7 +231,7 @@ export default function Search({}: Props): ReactElement {
               History
             </Divider>
             {/* <h1>{JSON.stringify(dataHistory)}</h1> */}
-            {dataHistory &&
+            {dataHistory === [] ? (
               dataHistory.map((item) => (
                 <>
                   <h1 key={item.id} className={Theme.lightTextBody}>
@@ -243,7 +245,15 @@ export default function Search({}: Props): ReactElement {
                     }}
                   />
                 </>
-              ))}
+              ))
+            ) : (
+              <div className={Theme.u_cbox_comment_none}>
+                <div>
+                  <img src="empty.png" alt="No data" width="80px" />
+                </div>
+                <span className={Theme.u_cbox_comment_none}>No data</span>
+              </div>
+            )}
           </>
         )}
       </div>

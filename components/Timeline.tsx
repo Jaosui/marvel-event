@@ -1,7 +1,6 @@
 import React, { ReactElement } from "react";
 import Theme from "../styles/Theme.module.css";
-import { Card, Row, Col } from "antd";
-import Image from "next/image";
+import { Card } from "antd";
 import Slider from "react-slick";
 import { useRouter } from "next/router";
 
@@ -62,7 +61,6 @@ export default function Timeline({ data }: Props): ReactElement {
           {data &&
             data.map((event: any, index: number) => (
               <div key={index}>
-                {/* <h1 className={Theme.lightTextBody}>{event.id} {event.title} {event.thumbnail.path}.{event.thumbnail.extension}</h1> */}
                 <Card
                   hoverable
                   bordered={false}

@@ -70,7 +70,6 @@ export const initId1 = async () => {
       console.log('เข้าลิ้งผ่านexternal browser + ยังไม่เข้าสู่ระบบ')
     }
   }
-  return liff.isInClient()
 }
 export const loginWithLine = async () => {
   console.log("login")

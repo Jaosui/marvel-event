@@ -1,14 +1,35 @@
 import React, { ReactElement } from "react";
 import HeadTag from "../../components/Header";
 import { useRouter } from "next/router";
-import { Form, Input, Card, Button, Row, Col, Modal, notification, Grid } from "antd";
-import { HeartOutlined, CommentOutlined, MessageOutlined, HeartFilled  } from "@ant-design/icons";
+import {
+  Form,
+  Input,
+  Card,
+  Button,
+  Row,
+  Col,
+  Modal,
+  notification,
+  Grid,
+} from "antd";
+import {
+  HeartOutlined,
+  CommentOutlined,
+  MessageOutlined,
+  HeartFilled,
+} from "@ant-design/icons";
 import Image from "next/image";
 import Slider from "react-slick";
 import { charactersDetail, eventDetail1 } from "../../utils/marveiApi";
-import { allMyFav, deleteFav, getData, sendData, sendFav } from "../../utils/handleFirebase";
+import {
+  allMyFav,
+  deleteFav,
+  getData,
+  sendData,
+  sendFav,
+} from "../../utils/handleFirebase";
 import { async } from "@firebase/util";
-import Theme from "../../styles/Theme.module.css"
+import Theme from "../../styles/Theme.module.css";
 
 interface Props {
   eventDetail: any;
@@ -50,8 +71,6 @@ export default function EventID({ eventDetail }: Props): ReactElement {
   const [timeComments, setTimeComments] = React.useState("");
   //favHeart
   const [favActive, setFavActive] = React.useState(false);
-  //screen
-  const [screenLg, setScreenLg] = React.useState(false);
 
   const liffId = "1656481834-Gdg42lxP";
 
@@ -66,13 +85,11 @@ export default function EventID({ eventDetail }: Props): ReactElement {
     if (liff.isLoggedIn()) {
       console.log("เข้าสู่ระบบแล้ว");
       const user = JSON.parse(localStorage.getItem("User_Profile"));
-      console.log(user)
-      console.log('user.userId', user[0].userId)
       setUserId(user[0].userId);
       setDisplayName(user[0].displayName);
       setImgUser(user[0].pictureUrl);
-      setStatusMessage(user[0].statusMessage);
-      firstTimeFav(user[0].userId)
+      setStatusMessage(user[0].statusMessage); //ตัสไลน์
+      firstTimeFav(user[0].userId);
     } else {
       const profileData = null;
       setImgUser(profileData);
@@ -86,48 +103,42 @@ export default function EventID({ eventDetail }: Props): ReactElement {
     console.log("event", event);
     console.log("charactersData", charactersData);
     setEvent(event);
-    setEventName(event[0].title)
-    // console.log(eventName)
-    console.log(event[0].title)
+    setEventName(event[0].title);
     setCharacters(charactersData);
   };
 
   React.useEffect(() => {
-    //     // getOldData()
     if (router.query.eventID) {
       initId();
       const queryID = router.query.eventID; //string
       const id: number = parseInt(queryID as string, 10);
       console.log("getID", id);
-      setEventID(id)
-      screenSize()
-      // getEventDetail(id)
+      setEventID(id);
       eventData01(id);
       //old-comment
-      userComment(id)
-      console.log('fav firsttime :', favActive)
-      console.log('userId :', userId)
+      userComment(id);
+      console.log("fav firsttime :", favActive);
+      console.log("userId :", userId);
     }
-    currentDate()
-    //  console.log('router.query>>', router.query)
+    currentDate();
   }, [router.query]);
 
-  const firstTimeFav = async (userId:string) => {
+  const firstTimeFav = async (userId: string) => {
     const queryID = router.query.eventID; //string
     const id: number = parseInt(queryID as string, 10);
-    console.log(userId)
-    const favEvent = await allMyFav(userId)
-    console.log(favEvent)
-    console.log('eventID', id)
+    console.log(userId);
+    const favEvent = await allMyFav(userId);
+    console.log(favEvent);
+    console.log("eventID", id);
     for (const i of favEvent.myFav) {
       console.log(i);
       // truncate the sequence at 1000
       if (i === id) {
-        console.log('favไว้แล้วจ้า')
-        setFavActive(true)
+        console.log("favไว้แล้วจ้า");
+        setFavActive(true);
       }
     }
-  }
+  };
 
   const myLoader = ({ src, width, quality }) => {
     return `${src}?w=${width}&q=${quality || 75}`;
@@ -139,22 +150,22 @@ export default function EventID({ eventDetail }: Props): ReactElement {
 
   const favBtn = () => {
     console.log("fav>>");
-    console.log(eventName)
-    setFavActive(!favActive)
-    console.log("2", favActive)
+    console.log(eventName);
+    setFavActive(!favActive);
+    console.log("2", favActive);
     // console.log(userId)
-    const favData:Favorite = {
+    const favData: Favorite = {
       eventID: eventID,
       userId: userId,
       Myfav: !favActive,
-      eventName: eventName
-    }
-    if(favActive === true){
-      console.log('fav false') //delete in firebase
-      deleteFav(favData)
+      eventName: eventName,
+    };
+    if (favActive === true) {
+      console.log("fav false"); //delete in firebase
+      deleteFav(favData);
     } else {
-      console.log('fav true') ///add in firebase
-      sendFav(favData)
+      console.log("fav true"); ///add in firebase
+      sendFav(favData);
     }
     console.log(favData);
   };
@@ -195,39 +206,51 @@ export default function EventID({ eventDetail }: Props): ReactElement {
   //comments
   const [form] = Form.useForm();
 
-  const userComment = async (eventID:number) => {
-    const commentFirestore = await getData(eventID)
-    console.log('commentFirestore>>', commentFirestore)
-    setComments(commentFirestore)
-  }
+  const userComment = async (eventID: number) => {
+    const commentFirestore = await getData(eventID);
+    console.log("commentFirestore>>", commentFirestore);
+    setComments(commentFirestore);
+  };
 
   const NotifyBlankComment = () => {
-    notification['warning']({
-      message: 'Notification',
-      description:
-        'Please enter any comments.',
+    notification["warning"]({
+      message: "Notification",
+      description: "Please enter any comments.",
     });
   };
 
   const NotifySuccessComment = () => {
-    notification['success']({
-      message: 'Notification',
-      description:
-        `You're done! your comment has been post on this event.`,
+    notification["success"]({
+      message: "Notification",
+      description: `You're done! your comment has been post on this event.`,
     });
   };
 
   const currentDate = () => {
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     const today = new Date();
-    const day = today.getDate()
-    const month =  monthNames[today.getMonth()]
-    const years = today.getFullYear()
-    const date =  month + ' ' + day+ ', ' + years
-    const time = today.getHours()+ ":"+ today.getMinutes() + ":"+ today.getSeconds();
-    setDateComments(date)
-    setTimeComments(time)
-  }
+    const day = today.getDate();
+    const month = monthNames[today.getMonth()];
+    const years = today.getFullYear();
+    const date = month + " " + day + ", " + years;
+    const time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    setDateComments(date);
+    setTimeComments(time);
+  };
 
   const onFinish = (values: any) => {
     // saveComment(values)
@@ -235,33 +258,33 @@ export default function EventID({ eventDetail }: Props): ReactElement {
     console.log("values.comment:", values.comment);
     const userProfile = JSON.parse(localStorage.getItem("User_Profile")) || []; // string>>>obj
     console.log("userProfile", userProfile);
-    const commentData:Comment = {
+    const commentData: Comment = {
       eventID: eventID,
       userId: userId,
       displayName: displayName,
       pictureUrl: imgUser,
       comment: values.comment,
       date: dateComments,
-      time: timeComments
-    }
+      time: timeComments,
+    };
     if (userProfile.length === 0) {
-      console.log('notice: Login')
+      console.log("notice: Login");
       setIsModalLogin(true);
     } else if (values.comment === undefined) {
-      console.log('notice: blank comment')
-      NotifyBlankComment()
+      console.log("notice: blank comment");
+      NotifyBlankComment();
     } else {
-      console.log('notice: save comment')
-      currentDate()
-      console.log(typeof commentData)
-      sendData(commentData)
+      console.log("notice: save comment");
+      currentDate();
+      console.log(typeof commentData);
+      sendData(commentData);
       setTimeout(() => {
-        userComment(eventID)
-        console.log('notice: setTimeout')
+        userComment(eventID);
+        console.log("notice: setTimeout");
       }, 500);
       // clearTimeout(id)
-      NotifySuccessComment()
-      console.log('notice: new comment')
+      NotifySuccessComment();
+      console.log("notice: new comment");
     }
     form.resetFields();
   };
@@ -274,261 +297,247 @@ export default function EventID({ eventDetail }: Props): ReactElement {
     setIsModalLogin(false);
   };
 
-
   const login = async () => {
-    console.log("login")
-    const liff = (await import('@line/liff')).default
-    await liff.ready
+    console.log("login");
+    const liff = (await import("@line/liff")).default;
+    await liff.ready;
     liff.login({ redirectUri: window.location.href });
   }
-
-  const commentsData = [
-    {
-      userId: "001",
-      displayName: "Slyfer2812",
-      pictureUrl: `https://firebasestorage.googleapis.com/v0/b/marvel-event.appspot.com/o/avatar%2F2624893_avengers_iron%20man_marvel_super%20hero_icon.png?alt=media&token=b32f1bff-5d2a-4ba0-8248-80c120fba985`,
-      comment:
-        "The first time I have seen this Green Goblin grenade I was 5 years old. 21 now.",
-      date: "Jan 13, 2021",
-    },
-    {
-      userId: "002",
-      displayName: "Faiz Patel",
-      pictureUrl: `https://firebasestorage.googleapis.com/v0/b/marvel-event.appspot.com/o/avatar%2F2624896_avengers_captain_captain%20america_super%20hero_icon.png?alt=media&token=78e9073a-5e69-495f-8a4f-4683a3c59b74`,
-      comment: `If you've grown with all the 3 Spider-Men, then you're something of a legend yourselves 😁`,
-      date: "Oct 12, 2021",
-    },
-    {
-      userId: "003",
-      displayName: "MKSpider-ManFan2021",
-      pictureUrl: `https://firebasestorage.googleapis.com/v0/b/marvel-event.appspot.com/o/avatar%2F2624867_humanoid_loki_super%20villain_thanos_icon.png?alt=media&token=3e820d82-1037-4105-9eb7-32c473f2ec2f`,
-      comment: `Andrew and Tom: Dangit, we're out of web fluid!
-      Tobey: I missed the part where that's my problem.`,
-      date: "Sep 9, 2021",
-    },
-  ];
-
-  //screens
-  const { useBreakpoint } = Grid;  
-
-  const screens = useBreakpoint();
-  const screenSize = () =>{
-    if(screens.lg === true){
-      setScreenLg(true)
-      console.log('lg')
-    }
-  }  
 
   return (
     <>
       <HeadTag />
       <div className={Theme.dark}>
         {/* descpirtion */}
-        {characters ? 
-        <div>
-          {event &&
-          event.map((item, index) => (
-            <div key={index}>
-              <Row wrap={true}  style={{ background: "#fff" }}>
-                <Col
-                  flex="1 0 50%"
-                  className="columnFlex"
-                  style={{ background: "transparent" }}
-                >
-                  <div
-                    style={{ margin: " 6px auto 0", background: "transparent" }}
-                    className={Theme.centerHorizonal}
-                  >
-                    <Image
-                      loader={myLoader}
-                      src={`${item.thumbnail.path}.${item.thumbnail.extension}`}
-                      alt="The Thanos Imperative"
-                      width={500}
-                      height={500}
-                    />
-                  </div>
-                </Col>
-                <Col
-                  flex="1 0 50%"
-                  className="columnFlex"
-                  style={{ background: "transparent" }}
-                >
-                  <div style={{ margin: " 6px auto 0", padding: "15px", background: "#fff", maxWidth: '500px'}}>
-                    <div className={Theme.detailBox}>
-                      <a  style={{display: "block" }}>
-                        <span
-                          className={Theme.detailNameBox}
-                        >
-                          {item.title}
-                        </span>
-                      </a>
-                      <a className={Theme.detailImgBox}>
-                      <Button
-                          type="link"
-                          onClick={favBtn}
-                          icon={ favActive ?
-                            // <HeartOutlined style={{ fontSize: "30px", color: "#000" }} />
-                            <HeartFilled style={{ fontSize: '30px', color: '#EC1D24'}} /> :
-                            <HeartOutlined style={{ fontSize: "30px", color: "#000" }} />
-                          }
-                        />
-                      </a>
-                    </div>
-                    <h5
-                      className={Theme.grayThinText}
-                      style={{ marginBottom: "0" }}
-                    >
-                      start: {item.start.slice(0, 10)}
-                    </h5>
-                    <h5
-                      className={Theme.grayThinText}
-                      style={{ marginBottom: "15px" }}
-                    >
-                      end: {item.end.slice(0, 10)}
-                    </h5>
-                    <h5
-                      className={Theme.darkThinText}
-                      style={{ textAlign: "justify", lineHeight: '1.2' }}
-                    >
-                      {item.description}
-                    </h5>
-                  </div>
-                </Col>
-              </Row>
-            </div>
-          ))}
-        {/* Characters In This Event */}
-        <div style={{ padding: "50px 0" }}>
-          <h2 className={Theme.lightText}>Characters In This Event</h2>
-          <Slider {...settings}>
-            {characters &&
-              characters.map((character: any, index: number) => (
+        {characters ? (
+          <div>
+            {event &&
+              event.map((item, index) => (
                 <div key={index}>
-                  <Card
-                    bordered={false}
-                    style={{ padding: "2px" }}
-                    bodyStyle={{ border: 0, padding: "0.5vmax 0 0" }}
-                    cover={<Image
-                      loader={myLoader}
-                      alt={`${character.name}`}
-                      src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-                      width="150px"
-                      height="150px"
-                      />
-                    }
-                  >
-                    <span className={Theme.titleText}>{character.name}</span>
-                  </Card>
+                  <Row wrap={true} style={{ background: "#fff" }}>
+                    <Col
+                      flex="1 0 50%"
+                      className="columnFlex"
+                      style={{ background: "transparent" }}
+                    >
+                      <div
+                        style={{
+                          margin: " 6px auto 0",
+                          background: "transparent",
+                        }}
+                        className={Theme.centerHorizonal}
+                      >
+                        <Image
+                          loader={myLoader}
+                          src={`${item.thumbnail.path}.${item.thumbnail.extension}`}
+                          alt="The Thanos Imperative"
+                          width={500}
+                          height={500}
+                        />
+                      </div>
+                    </Col>
+                    <Col
+                      flex="1 0 50%"
+                      className="columnFlex"
+                      style={{ background: "transparent" }}
+                    >
+                      <div
+                        style={{
+                          margin: " 6px auto 0",
+                          padding: "15px",
+                          background: "#fff",
+                          maxWidth: "500px",
+                        }}
+                      >
+                        <div className={Theme.detailBox}>
+                          <a style={{ display: "block" }}>
+                            <span className={Theme.detailNameBox}>
+                              {item.title}
+                            </span>
+                          </a>
+                          <a className={Theme.detailImgBox}>
+                            <Button
+                              type="link"
+                              onClick={favBtn}
+                              icon={
+                                favActive ? (
+                                  // <HeartOutlined style={{ fontSize: "30px", color: "#000" }} />
+                                  <HeartFilled
+                                    style={{
+                                      fontSize: "30px",
+                                      color: "#EC1D24",
+                                    }}
+                                  />
+                                ) : (
+                                  <HeartOutlined
+                                    style={{ fontSize: "30px", color: "#000" }}
+                                  />
+                                )
+                              }
+                            />
+                          </a>
+                        </div>
+                        <h5
+                          className={Theme.grayThinText}
+                          style={{ marginBottom: "0" }}
+                        >
+                          start: {item.start.slice(0, 10)}
+                        </h5>
+                        <h5
+                          className={Theme.grayThinText}
+                          style={{ marginBottom: "15px" }}
+                        >
+                          end: {item.end.slice(0, 10)}
+                        </h5>
+                        <h5
+                          className={Theme.darkThinText}
+                          style={{ textAlign: "justify", lineHeight: "1.2" }}
+                        >
+                          {item.description}
+                        </h5>
+                      </div>
+                    </Col>
+                  </Row>
                 </div>
               ))}
-          </Slider>
-        </div>
-        {/* comments */}
-        <div
-          style={{ backgroundColor: "#f3f3f3", padding: "10px 20px 15px 20px" }}
-        >
-          <h2 className={Theme.darkText}>Comments</h2>
-          <div className={Theme.writeComment} style={{ padding: "0 10px" }}>
-            <Form form={form} onFinish={onFinish} layout="inline">
-              <Form.Item
-                name="comment"
-                wrapperCol={{ sm: 24 }}
-                style={{ width: "90%", marginBottom: 0, marginRight: 0 }}
-              >
-                <Input.TextArea className={Theme.comment} />
-              </Form.Item>
-              <Form.Item wrapperCol={{ sm: 24 }}  style={{ width: "10%", marginRight: 0 }}>
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className={Theme.btnCbox}
-                >
-                  POST
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-          {/* <div className={Theme.u_cbox_comment_box}>
-            <span className={Theme.u_cbox_avatar}>
-              <Image
-                loader={myLoaderFirebase}
-                src={`https://firebasestorage.googleapis.com/v0/b/marvel-event.appspot.com/o/avatar%2F2624860_hawkeye_hero_marvel%20characteristic_super%20hero_icon.png?alt=media&token=a5a0da01-99cf-4131-87ac-6eb246d0730f`}
-                alt="user"
-                unoptimized={true}
-                width={50}
-                height={50}
-              />
-            </span>
-            <span className={Theme.u_cbox_name}>my hpn 🍋👀🍒🧸</span>
-            <span className={Theme.u_cbox_contents}>
-              test1
-            </span>
-            <span className={Theme.u_cbox_date}>Sep 9, 2021</span>
-          </div> */}
-          {comments ?
-            comments.map((item, index) => (
-              <div key={index} className={Theme.u_cbox_comment_box}>
-                <span className={Theme.u_cbox_avatar}>
-                  <Image
-                    className="rounded-corners"
-                    loader={myLoaderFirebase}
-                    src={`${item.pictureUrl}`}
-                    alt="user"
-                    unoptimized={true}
-                    width={50}
-                    height={50}
-                  />
-                </span>
-                <span className={Theme.u_cbox_name}>{item.displayName}</span>
-                <span className={Theme.u_cbox_contents}>{item.comment}</span>
-                <span className={Theme.u_cbox_date}>{item.date}</span>
-              </div>
-            )) : <div className={Theme.u_cbox_comment_none}>
-            <div>
-              <MessageOutlined style={{ fontSize: '60px', paddingBottom: '10px' }}/>
+            {/* Characters In This Event */}
+            <div style={{ padding: "50px 0" }}>
+              <h2 className={Theme.lightText}>Characters In This Event</h2>
+              <Slider {...settings}>
+                {characters &&
+                  characters.map((character: any, index: number) => (
+                    <div key={index}>
+                      <Card
+                        bordered={false}
+                        style={{ padding: "2px" }}
+                        bodyStyle={{ border: 0, padding: "0.5vmax 0 0" }}
+                        cover={
+                          <Image
+                            loader={myLoader}
+                            alt={`${character.name}`}
+                            src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
+                            width="150px"
+                            height="150px"
+                          />
+                        }
+                      >
+                        <span className={Theme.titleText}>
+                          {character.name}
+                        </span>
+                      </Card>
+                    </div>
+                  ))}
+              </Slider>
             </div>
-            <span className={Theme.u_cbox_comment_none}>There is no comment.<br/>Be the first to comment.</span>
-          </div>}
-          <div>
-            <Modal
-              title="Notice"
-              visible={isModalLogin}
-              onOk={handleOk} onCancel={handleCancel}
-              bodyStyle={{padding: '15px 16px'}}
-              footer={[
-                <button
-                  key="1"
-                  className={Theme.btnLogin}
-                  onClick={login}
-                >
-                  LOGIN
-                </button>
-              ]}
+            {/* comments */}
+            <div
+              style={{
+                backgroundColor: "#f3f3f3",
+                padding: "10px 20px 15px 20px",
+              }}
             >
-              <h5 className={Theme.darkText} style={{textAlign: 'center'}}>
-                Login and Enjoy special features.
-              </h5>
-            </Modal>
+              <h2 className={Theme.darkText}>Comments</h2>
+              <div className={Theme.writeComment} style={{ padding: "0 10px" }}>
+                <Form form={form} onFinish={onFinish} layout="inline">
+                  <Form.Item
+                    name="comment"
+                    wrapperCol={{ sm: 24 }}
+                    style={{ width: "90%", marginBottom: 0, marginRight: 0 }}
+                  >
+                    <Input.TextArea className={Theme.comment} />
+                  </Form.Item>
+                  <Form.Item
+                    wrapperCol={{ sm: 24 }}
+                    style={{ width: "10%", marginRight: 0 }}
+                  >
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      className={Theme.btnCbox}
+                    >
+                      POST
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
+              {comments ? (
+                comments.map((item, index) => (
+                  <div key={index} className={Theme.u_cbox_comment_box}>
+                    <span className={Theme.u_cbox_avatar}>
+                      <Image
+                        className="rounded-corners"
+                        loader={myLoaderFirebase}
+                        src={`${item.pictureUrl}`}
+                        alt="user"
+                        unoptimized={true}
+                        width={50}
+                        height={50}
+                      />
+                    </span>
+                    <span className={Theme.u_cbox_name}>
+                      {item.displayName}
+                    </span>
+                    <span className={Theme.u_cbox_contents}>
+                      {item.comment}
+                    </span>
+                    <span className={Theme.u_cbox_date}>{item.date}</span>
+                  </div>
+                ))
+              ) : (
+                <div className={Theme.u_cbox_comment_none}>
+                  <div>
+                    <MessageOutlined
+                      style={{ fontSize: "60px", paddingBottom: "10px" }}
+                    />
+                  </div>
+                  <span className={Theme.u_cbox_comment_none}>
+                    There is no comment.
+                    <br />
+                    Be the first to comment.
+                  </span>
+                </div>
+              )}
+              <div>
+                <Modal
+                  title="Notice"
+                  visible={isModalLogin}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  bodyStyle={{ padding: "15px 16px" }}
+                  footer={[
+                    <button key="1" className={Theme.btnLogin} onClick={login}>
+                      LOGIN
+                    </button>,
+                  ]}
+                >
+                  <h5
+                    className={Theme.darkText}
+                    style={{ textAlign: "center" }}
+                  >
+                    Login and Enjoy special features.
+                  </h5>
+                </Modal>
+              </div>
+            </div>
           </div>
-        </div>
-        </div> :
-        <div>
-          <div
-            style={{ margin: " 6px auto 0", background: "transparent" }}
-            className={Theme.centerHorizonal}
-          > 
-          <div className={Theme.u_cbox_comment_none}>
-            <Image
-              loader={myLoader}
-              src="https://thumbs.gfycat.com/LeanEnlightenedAndeancockoftherock.webp"
-              alt="loading"
-              width={60}
-              height={80}
-            />
+        ) : (
+          <div>
+            <div
+              style={{ margin: " 6px auto 0", background: "transparent" }}
+              className={Theme.centerHorizonal}
+            >
+              <div className={Theme.u_cbox_comment_none}>
+                <Image
+                  loader={myLoader}
+                  src="https://thumbs.gfycat.com/LeanEnlightenedAndeancockoftherock.webp"
+                  alt="loading"
+                  width={60}
+                  height={80}
+                />
+              </div>
+            </div>
           </div>
-          </div>
-        </div>
-        }
+        )}
       </div>
     </>
   );
