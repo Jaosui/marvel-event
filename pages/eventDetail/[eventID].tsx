@@ -149,6 +149,8 @@ export default function EventID({ eventDetail }: Props): ReactElement {
   };
 
   const favBtn = () => {
+    const userProfile = JSON.parse(localStorage.getItem("User_Profile")) || []; // string>>>obj
+    console.log("userProfile", userProfile);
     console.log("fav>>");
     console.log(eventName);
     setFavActive(!favActive);
@@ -160,14 +162,19 @@ export default function EventID({ eventDetail }: Props): ReactElement {
       Myfav: !favActive,
       eventName: eventName,
     };
-    if (favActive === true) {
+    if (userProfile.length === 0) {
+      console.log(userId); //delete in firebase
+      setIsModalLogin(true);
+      setFavActive(false);
+    } else if (favActive === true) {
+      console.log(userId);
       console.log("fav false"); //delete in firebase
       deleteFav(favData);
-    } else {
+    } else if (favActive === false) {
+      console.log(userId);
       console.log("fav true"); ///add in firebase
       sendFav(favData);
     }
-    console.log(favData);
   };
 
   const settings = {

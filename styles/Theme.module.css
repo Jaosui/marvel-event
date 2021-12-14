@@ -248,7 +248,7 @@
   z-index: 1;
   float: left;
   width: 100%;
-  height: 10vh !important;
+  height: 100px !important;
   padding: 10px 10px;
   margin: 0;
   border: 2px solid rgba(222,222,222,0); 
@@ -270,7 +270,7 @@
   right: 0;
   z-index: 10;
   width: 20vw;
-  height: 10vh;
+  height: 100px;
   background: #ec1d24;
   border-color: #ec1d24;
   font-family: LeagueSpartan;

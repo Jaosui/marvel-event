@@ -87,8 +87,8 @@ export default function User({}: Props): ReactElement {
             loader={myLoader}
             src={`${imgUser}`}
             alt="imgUser"
-            width={30}
-            height={30}
+            width={35}
+            height={35}
           />
         </Dropdown>
       ) : (
